@@ -1,0 +1,1 @@
+<div style="background:#E8E8E8; width:100%;padding:10px;">Seatt Menu: <a href="admin.php?page=seatt_events">Home</a> - <a href="admin.php?page=seatt_events_add">Add Event</a> - <a href="http://www.3cc.org/scripts/wp-seatt-simple-event-attendance/">Support</a></div>
