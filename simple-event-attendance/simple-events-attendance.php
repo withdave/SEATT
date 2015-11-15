@@ -1,7 +1,7 @@
 <?php
 /*
 Plugin Name: Simple Event Attendance (SEATT)
-Version: 1.2.7
+Version: 1.3.0
 Plugin URI: http://www.3cc.org/scripts/wp-seatt-simple-event-attendance/
 Author: Dave Channon
 Author URI: http://www.3cc.org

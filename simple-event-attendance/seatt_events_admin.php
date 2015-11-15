@@ -7,8 +7,8 @@
 // Check for remove event, and remove if present
 if ((isset($_GET['event_id'])) && (isset($_GET['remove_event']))) {
 	$event_id = (int)$_GET['event_id'];
-	$wpdb->query("DELETE FROM ".$wpdb->prefix."seatt_attendees WHERE event_id = $event_id");
-	$wpdb->query("DELETE FROM ".$wpdb->prefix."seatt_events WHERE id = $event_id");
+	$wpdb->query($wpdb->prepare("DELETE FROM ".$wpdb->prefix."seatt_attendees WHERE event_id = %d", $event_id));
+	$wpdb->query($wpdb->prepare("DELETE FROM ".$wpdb->prefix."seatt_events WHERE id = %d", $event_id));
 	?>  
         <div class="updated"><p><strong><?php _e('Event ' . $event_id . ' deleted.' ); ?></strong></p></div>  
         <?php
@@ -19,11 +19,11 @@ if ((isset($_GET['event_id'])) && (isset($_GET['duplicate_event']))) {
 	$event_id = (int)$_GET['event_id'];
 	
 	// Get existing event details
-	$event = $wpdb->get_results("SELECT event_name, event_desc, event_limit, event_start, event_expire, event_reserves FROM ".$wpdb->prefix."seatt_events WHERE id = ".$event_id);
+	$event = $wpdb->get_results($wpdb->prepare("SELECT event_name, event_desc, event_limit, event_start, event_expire, event_reserves FROM ".$wpdb->prefix."seatt_events WHERE id = %d", $event_id));
 
 	if ($event != NULL) {
 	// Create another record
-	$wpdb->insert($wpdb->prefix.'seatt_events', array( 'event_name' => $event[0]->event_name, 'event_desc' => $event[0]->event_desc, 'event_limit' => $event[0]->event_limit, 'event_start' => $event[0]->event_start, 'event_expire' => $event[0]->event_expire, 'event_status' => 0, 'event_reserves' => $event[0]->event_reserves ) );
+	$wpdb->insert($wpdb->prefix.'seatt_events', array( 'event_name' => $event[0]->event_name, 'event_desc' => $event[0]->event_desc, 'event_limit' => $event[0]->event_limit, 'event_start' => $event[0]->event_start, 'event_expire' => $event[0]->event_expire, 'event_status' => 0, 'event_reserves' => $event[0]->event_reserves ), array('%s', '%s', '%d', '%s', '%s', '%d', '%d') );
 	?>  
         <div class="updated"><p><strong><?php _e('Event ' . $event_id . ' duplicated.' ); ?></strong></p></div>  
         <?php

@@ -11,7 +11,7 @@
 			$event_expire = strtotime($_POST['seatt_expire']);
 			
 			global $wpdb;
-			$wpdb->insert($wpdb->prefix.'seatt_events', array( 'event_name' => $event_name, 'event_desc' => $event_desc, 'event_limit' => $event_limit, 'event_start' => $event_start, 'event_expire' => $event_expire, 'event_status' => 1, 'event_reserves' => 0 ) );
+			$wpdb->insert($wpdb->prefix.'seatt_events', array( 'event_name' => $event_name, 'event_desc' => $event_desc, 'event_limit' => $event_limit, 'event_start' => $event_start, 'event_expire' => $event_expire, 'event_status' => 1, 'event_reserves' => 0 ), array('%s', '%s', '%d', '%s', '%s', '%d', '%d') );
 			?>
             <div class="updated"><p><strong><?php _e('Event "'.$event_name.'" added.' ); ?></strong></p></div>
             <?php

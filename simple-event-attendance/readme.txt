@@ -1,12 +1,12 @@
 === Plugin Name ===
 Contributors: sourcez
 Donate link: http://www.3cc.org/
-Tags: events, attendance list, attendance, event management
+Tags: events, attendance list, attendance, event management, sign-up, registration
 Requires at least: 3
-Tested up to: 3.2.1
-Stable tag: 1.2.7
+Tested up to: 4.3.1
+Stable tag: 1.3.0
 
-Simple attendance list, multiple lists can be added to any post or page and subscribed members can be edited.
+Simple attendance list, multiple lists can be added to any post or page and subscribed members can be edited through the admin panel.
 
 == Description ==
 
@@ -20,7 +20,7 @@ Please note you have to allow user registration for this plugin to function. If 
 
 Uninstalling removes all traces of plugin, including from the database. This means any events you have will be lost. Updates will not affect existing events nor their attendees.
 
-Comments are always welcome, and I try to fix problems as soon as possible.
+Comments are always welcome, it's through feedback that we improve.
 
 == Installation ==
 
@@ -34,7 +34,8 @@ Simple to install, automatically adds relevant information to the database.
 
 == Frequently Asked Questions ==
 
-No FAQ's just yet.
+Q: Why can't we add un-registered users?
+A: This has been left out due to the large number of signups we experienced when testing from spam bots. It can be done quite easily, but it will require putting a captcha into the code for most use cases.
 
 == Screenshots ==
 
@@ -45,6 +46,9 @@ No FAQ's just yet.
 5. screenshot-5.png shows a post with the signup form after registering, this has a start and finish time from v1.2
 
 == Changelog ==
+
+= 1.3.0 = 
+Updated all SQL queries to use wpdb->prepare for additional security, and updated security as per feedback from J.D. Grimes and Ipstensu to remove a SQL injection risk. Also fixed a template issue when the register form is shown in new wordpress templates, and tested compatibility with 4.3.1. Fixed an issue where character encoding would display comments incorrectly on the user-side. Apologies for the delay in updating this plugin.
 
 = 1.2.7 = 
 Updated version numbers, fixed problems with apostrophes being escaped with numerous backspaces in admin panel and in the comment box. Removed first+last name from page template as this is rarely used, with list users no longer in a table format, but now in an ordered list. Admins can now signup registered users simply by supplying a username in the admin panel. Fixed problems with wp_prepare() causing errors in wordpress 3.5. Deleting the plugin now removes all database tables.
@@ -77,6 +81,9 @@ Fixed errors with multiple forms on the same page (thanks to mhobach) and form n
 * Initial Release Version
 
 == Upgrade Notice ==
+
+= 1.3.0 =
+Changes in all files (see changelog). Recommend upgrading to improve security and patch possible SQL injection by users with author+ accounts.
 
 = 1.2.7 =
 Changes in files & database (see changelog).

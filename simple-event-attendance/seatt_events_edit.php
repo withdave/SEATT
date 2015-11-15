@@ -15,7 +15,7 @@ if (isset($_GET['event_id'])) {
 		  }
 		  // Remove all participants
 		  if (isset($_GET['clear_event'])) {
-			  $wpdb->query("DELETE FROM ".$wpdb->prefix."seatt_attendees WHERE event_id = $event_id");
+			  $wpdb->query($wpdb->prepare("DELETE FROM ".$wpdb->prefix."seatt_attendees WHERE event_id = %d", $event_id));
 			  ?>
             <div class="updated"><p><strong><?php _e('All attendees removed.' ); ?></strong></p></div>
             <?php
@@ -28,11 +28,11 @@ if (isset($_GET['event_id'])) {
 			  if (username_exists($add_username) != NULL) {
 			  	// Check not already registered
 				$add_userid = username_exists($add_username);
-				$a_registered = $wpdb->get_var("SELECT user_id FROM ".$wpdb->prefix."seatt_attendees WHERE event_id = ".$event_id." AND user_id = ".$add_userid);
+				$a_registered = $wpdb->get_var($wpdb->prepare("SELECT user_id FROM ".$wpdb->prefix."seatt_attendees WHERE event_id = %d AND user_id = %d", $event_id, $add_userid));
 				// If not already registered
 				if ($a_registered == "") {
 					$user_comment = $_POST['seatt_add_comment'];
-					$wpdb->insert($wpdb->prefix.'seatt_attendees', array( 'event_id' => $event_id, 'user_id' => $add_userid, 'user_comment' => $user_comment ) );
+					$wpdb->insert($wpdb->prefix.'seatt_attendees', array( 'event_id' => $event_id, 'user_id' => $add_userid, 'user_comment' => $user_comment ), array('%d', '%d', '%s') );
 					?>
                     <div class="updated"><p><strong><?php _e('User ' . $add_username . ' added.' ); ?></strong></p></div>
                     <?php
@@ -60,7 +60,7 @@ if (isset($_GET['event_id'])) {
 			$event_start = strtotime($_POST['seatt_start']);
 			$event_expire = strtotime($_POST['seatt_expire']);
 			
-			$wpdb->update($wpdb->prefix.'seatt_events', array( 'event_name' => $event_name, 'event_desc' => $event_desc, 'event_limit' => $event_limit, 'event_start' => $event_start, 'event_expire' => $event_expire, 'event_status' => $event_status ), array( 'id' => $event_id ) );
+			$wpdb->update($wpdb->prefix.'seatt_events', array( 'event_name' => $event_name, 'event_desc' => $event_desc, 'event_limit' => $event_limit, 'event_start' => $event_start, 'event_expire' => $event_expire, 'event_status' => $event_status ), array( 'id' => $event_id ), array('%s', '%s', '%d', '%s', '%s', '%d'));
 			?>
             <div class="updated"><p><strong><?php _e('Event "'.$event_name.'" updated.' ); ?></strong></p></div>
 <?php
@@ -72,14 +72,14 @@ if (isset($_GET['event_id'])) {
 			$remove_attendee = '';
 		}
           if ($remove_attendee != '') {
-			$wpdb->query("DELETE FROM ".$wpdb->prefix."seatt_attendees WHERE id = $remove_attendee");
+			$wpdb->query($wpdb->prepare("DELETE FROM ".$wpdb->prefix."seatt_attendees WHERE id = %d", $remove_attendee));
 			$place = $_GET['place'];
 			?>
             <div class="updated"><p><strong><?php _e('Attendee '.$place.' removed.' ); ?></strong></p></div>
             <?php
 		  }
 		  // Get event details
-		   $event = $wpdb->get_results("SELECT id, event_name, event_desc, event_limit, event_start, event_expire, event_status FROM ".$wpdb->prefix."seatt_events WHERE id = $event_id");
+		   $event = $wpdb->get_results($wpdb->prepare("SELECT id, event_name, event_desc, event_limit, event_start, event_expire, event_status FROM ".$wpdb->prefix."seatt_events WHERE id = %d", $event_id));
 		   
 		   if ($event[0]->id != "") {
 			  ?>
@@ -129,7 +129,7 @@ eg '<?php echo date("d-m-Y H:i", current_time('timestamp') + 604800); ?>' (a wee
 		      <th align="left" scope="col">Options</th>
 	        </tr>
 		    <?php
-		  $users = $wpdb->get_results("SELECT id, user_id, user_comment FROM ".$wpdb->prefix."seatt_attendees WHERE event_id = ".$event_id." ORDER BY id ASC");
+		  $users = $wpdb->get_results($wpdb->prepare("SELECT id, user_id, user_comment FROM ".$wpdb->prefix."seatt_attendees WHERE event_id = %d ORDER BY id ASC", $event_id));
 		  $num = 1;
 	foreach ($users as $user) {
 		$user_info = get_userdata($user->user_id);
