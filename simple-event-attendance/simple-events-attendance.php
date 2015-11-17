@@ -1,7 +1,7 @@
 <?php
 /*
 Plugin Name: Simple Event Attendance (SEATT)
-Version: 1.3.0
+Version: 1.3.1
 Plugin URI: http://www.3cc.org/scripts/wp-seatt-simple-event-attendance/
 Author: Dave Channon
 Author URI: http://www.3cc.org
@@ -104,7 +104,8 @@ function seatt_admin_edit() {
 }
 
 function seatt_admin_actions() {
-	add_menu_page("SEATT Events", "SEATT Events", "level_3", "seatt_events", "seatt_admin", NULL );
+	add_menu_page("SEATT Events", "SEATT Events", "level_3", "seatt_events", "seatt_admin" );
+	add_submenu_page( "seatt_events", "SEATT Events View", "View Events", "level_3", "seatt_events", "seatt_admin" );
 	add_submenu_page( "seatt_events", "SEATT Events Add", "Add Event", "level_3", "seatt_events_add", "seatt_admin_add" );
 	add_submenu_page( "seatt_events", "SEATT Events Edit", "Edit Event", "level_3", "seatt_events_edit", "seatt_admin_edit" );
 }

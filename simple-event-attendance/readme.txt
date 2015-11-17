@@ -4,7 +4,7 @@ Donate link: http://www.3cc.org/
 Tags: events, attendance list, attendance, event management, sign-up, registration
 Requires at least: 3
 Tested up to: 4.3.1
-Stable tag: 1.3.0
+Stable tag: 1.3.1
 
 Simple attendance list, multiple lists can be added to any post or page and subscribed members can be edited through the admin panel.
 
@@ -29,13 +29,12 @@ Simple to install, automatically adds relevant information to the database.
 1. Upload `simple-events-attendance` directory to the `/wp-content/plugins/` directory
 2. Activate the plugin through the 'Plugins' menu in WordPress
 3. Set up an event in the admin panel (link on the sidebar)
-4. Place `[seatt-form event_id=x]` (where x = the event id) in your pages/posts.
+4. Place provided shortcode (where x = the event id) into your pages/posts.
 5. If you haven't already, enable "Anyone can register" in Settings>General.
 
 == Frequently Asked Questions ==
 
-Q: Why can't we add un-registered users?
-A: This has been left out due to the large number of signups we experienced when testing from spam bots. It can be done quite easily, but it will require putting a captcha into the code for most use cases.
+No FAQ's just yet.
 
 == Screenshots ==
 
@@ -46,6 +45,16 @@ A: This has been left out due to the large number of signups we experienced when
 5. screenshot-5.png shows a post with the signup form after registering, this has a start and finish time from v1.2
 
 == Changelog ==
+
+= 1.3.1 =
+Numerous changes to code to tidy and improve security, including:
+* Incorporated additional validation and sanitisation after feedback from Ipstenu.
+* Added code to check that users can only edit reservations for events that are open and exist (previously they could remove themselves by crafting a custom form). This was also added to the admin panel.
+* Fixed several errors possible when adding/removing registrations.
+* Added javascript to date fields to allow user to repopulate defaults.
+* Changed form actions on edit pages to strip any previous $_GET requests.
+* Added error messages on user side to inform why their registration may have failed.
+* Removed direct URI from user forms, now works better with HTTPS.
 
 = 1.3.0 = 
 Updated all SQL queries to use wpdb->prepare for additional security, and updated security as per feedback from J.D. Grimes and Ipstensu to remove a SQL injection risk. Also fixed a template issue when the register form is shown in new wordpress templates, and tested compatibility with 4.3.1. Fixed an issue where character encoding would display comments incorrectly on the user-side. Apologies for the delay in updating this plugin.
@@ -81,6 +90,9 @@ Fixed errors with multiple forms on the same page (thanks to mhobach) and form n
 * Initial Release Version
 
 == Upgrade Notice ==
+
+= 1.3.1 =
+Changes in all files (see changelog).
 
 = 1.3.0 =
 Changes in all files (see changelog). Recommend upgrading to improve security and patch possible SQL injection by users with author+ accounts.
