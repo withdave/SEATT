@@ -107,7 +107,7 @@ elseif ((isset($_POST['seatt_name'])) && (!isset($_POST['seatt_add_user']))) {
 		
 	$_POST = stripslashes_deep($_POST);  
 	$event_name = sanitize_text_field($_POST['seatt_name']);
-	$event_desc = sanitize_text_field($_POST['seatt_desc']);
+	$event_desc = wp_kses_post($_POST['seatt_desc']);
 	$event_limit = intval($_POST['seatt_limit']);
 	$event_status = intval($_POST['seatt_status']);
 	$event_start = strtotime($_POST['seatt_start']);
@@ -162,10 +162,16 @@ if ($event->id != "") {
 		<label for="seatt_name"></label>
 		<input name="seatt_name" type="text" id="seatt_name" value="<?php echo esc_html($event->event_name); ?>" size="50" maxlength="150">
 	</p>
-	<p>Event Description<br>
-		<label for="seatt_desc"></label>
-		<input name="seatt_desc" type="text" id="seatt_desc" value="<?php echo esc_html($event->event_desc); ?>" size="80" maxlength="150" />
-	</p>
+	
+    <p>Event Description<br>
+    <?php 
+    // Load in WP editor
+    $content = wp_kses_post($event->event_desc);
+    $editor_id = 'seatt_desc';
+
+    wp_editor( $content, $editor_id, array( 'media_buttons' => true, 'wpautop' => true, 'textarea_rows' => 5 ) );
+    ?>
+    </p>
 	<p>Attendee Limit (enter 0 for no limit)*<br>
 		<label for="seatt_limit"></label>
 		<input name="seatt_limit" type="text" id="seatt_limit" value="<?php echo esc_html($event->event_limit); ?>" size="14" maxlength="8">

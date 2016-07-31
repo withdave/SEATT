@@ -2,8 +2,12 @@
 function seatt_form($event_id) {
 	global $wpdb;
 	global $current_user;
-	get_currentuserinfo();
+	//get_currentuserinfo(); deprecated since wp 4.5
+    $current_user = wp_get_current_user();
 	$seatt_error = "";
+    
+    // Get settings
+    $seatt_set_public_comments = 0;
 	
 	// Clean down event ID by checking if numeric, then casting to integer
 	if (isset($event_id)) {
@@ -31,7 +35,7 @@ function seatt_form($event_id) {
 	if ($event_id != '') {
 		
 		// Get current state of event. 1 = open, 0 = closed, NULL = expired or doesn't exist
-		$seatt_event_state = $wpdb->get_var($wpdb->prepare("SELECT event_status FROM ".$wpdb->prefix."seatt_events WHERE id = %d AND event_expire >= %d", $event_id, time()));
+		$seatt_event_state = $wpdb->get_var($wpdb->prepare("SELECT event_status FROM ".$wpdb->prefix."seatt_events WHERE id = %d AND event_expire >= %d", $event_id, current_time('timestamp')));
 		
 		// If submitted, remove registration
 		if ((isset($_POST['seatt_unregister'])) && ($form_event_id == $event_id)) {
@@ -54,6 +58,11 @@ function seatt_form($event_id) {
 				// Get current number of free slots
 				$seatt_this_limit = $wpdb->get_var($wpdb->prepare("SELECT event_limit FROM ".$wpdb->prefix."seatt_events WHERE id = %d", $event_id));
 				$seatt_this_registered = $wpdb->get_var($wpdb->prepare("SELECT count(user_id) FROM ".$wpdb->prefix."seatt_attendees WHERE event_id = %d", $event_id));
+                
+                // Ensure if 0, user can signup
+                if ($seatt_this_limit == 0) {
+                    $seatt_this_limit = 100000;
+                }
 				
 				// If space, add registration
 				if ($seatt_this_limit > $seatt_this_registered) {
@@ -93,10 +102,10 @@ function seatt_form($event_id) {
 					$event->event_limit = 100000; 
 				}
 				
-				$seatt_output = '<div style="background:#E8E8E8;padding:10px;"><h2>' . esc_html($event->event_name) . '</h2>
-				<p><strong>Description:</strong> ' . esc_html($event->event_desc) . '<br />
-				Registration opens at ' . date("d-m-Y H:i", $event->event_start) . '<br />
-				Registration closes at ' . date("d-m-Y H:i", $event->event_expire) . '</p>';
+				$seatt_output = '<div style="background:#E8E8E8;padding:10px;margin-bottom:5px;"><h2 style="margin-top:10px;">' . esc_html($event->event_name) . '</h2>
+				<p><strong>Description:</strong> ' . wpautop($event->event_desc) . '</p>
+				<p>Registration opens at ' . date("d-m-Y H:i", $event->event_start) . '</p>
+				<p>Registration closes at ' . date("d-m-Y H:i", $event->event_expire) . '</p>';
 				
 				if ($event->event_limit != 100000) {
 					$seatt_output .= '<p>
@@ -106,16 +115,19 @@ function seatt_form($event_id) {
 			$seatt_output .= '<p><strong>Registered Users:</strong>
 			<ol style="margin-left:1em;">';
 			
-			$users = $wpdb->get_results($wpdb->prepare("SELECT id, user_id FROM ".$wpdb->prefix."seatt_attendees WHERE event_id = %d ORDER BY id ASC", $event_id));
+			$users = $wpdb->get_results($wpdb->prepare("SELECT id, user_id, user_comment FROM ".$wpdb->prefix."seatt_attendees WHERE event_id = %d ORDER BY id ASC", $event_id));
 			
-			$num = 1;
 			foreach ($users as $user) {
 				$user_info = get_userdata($user->user_id);
-				$seatt_output .= '<li>' . esc_html($user_info->user_login) . '</li>';
-				$num++;
+				$seatt_output .= '<li>' . esc_html($user_info->user_login);
+				// If public comments setting is enabled, display comments in form
+                if ($seatt_set_public_comments) {
+                    $seatt_output .= ' (' . esc_html($user->user_comment) . ')</li>';
+                }
+                $seatt_output .= '</li>';
 			}
 			
-			if ($num == 1) {
+			if (count($users) == 0) {
 				$seatt_output .= 'None found.';
 			}
 			

@@ -1,7 +1,7 @@
 <?php
 /*
 Plugin Name: Simple Event Attendance (SEATT)
-Version: 1.3.1
+Version: 1.4.0
 Plugin URI: http://www.3cc.org/scripts/wp-seatt-simple-event-attendance/
 Author: Dave Channon
 Author URI: http://www.3cc.org
@@ -102,12 +102,21 @@ function seatt_admin_add() {
 function seatt_admin_edit() {   
 	include('seatt_events_edit.php');
 }
+// To include in a version soon
+/*
+function seatt_admin_settings() {   
+	include('seatt_events_settings.php');
+}
+*/
 
 function seatt_admin_actions() {
 	add_menu_page("SEATT Events", "SEATT Events", "level_3", "seatt_events", "seatt_admin" );
-	add_submenu_page( "seatt_events", "SEATT Events View", "View Events", "level_3", "seatt_events", "seatt_admin" );
+	add_submenu_page( "seatt_events", "SEATT Events Summary", "View Events", "level_3", "seatt_events", "seatt_admin" );
 	add_submenu_page( "seatt_events", "SEATT Events Add", "Add Event", "level_3", "seatt_events_add", "seatt_admin_add" );
 	add_submenu_page( "seatt_events", "SEATT Events Edit", "Edit Event", "level_3", "seatt_events_edit", "seatt_admin_edit" );
+    /*
+	add_submenu_page( "seatt_events", "SEATT Events Settings", "Settings", "level_3", "seatt_events_settings", "seatt_admin_settings" );
+	*/
 }
 
 add_action('admin_menu', 'seatt_admin_actions');
@@ -120,5 +129,6 @@ function seatt_func( $atts ) {
 	return seatt_form("{$event_id}");
 }
 add_shortcode( 'seatt-form', 'seatt_func' );
+
 
 ?>

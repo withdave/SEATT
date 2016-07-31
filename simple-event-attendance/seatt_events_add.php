@@ -5,7 +5,7 @@
           if(isset($_POST['seatt_name'])) {
 			$_POST = stripslashes_deep($_POST);  
 			$event_name = sanitize_text_field($_POST['seatt_name']);
-			$event_desc = sanitize_text_field($_POST['seatt_desc']);
+			$event_desc = wp_kses_post($_POST['seatt_desc']);
 			$event_limit = intval($_POST['seatt_limit']);
 			$event_start = strtotime($_POST['seatt_start']);
 			$event_expire = strtotime($_POST['seatt_expire']);
@@ -24,6 +24,7 @@
 				<?php
 				
 			  } else {
+
 				// If required fields missing
 			  	?>
                 <div class="error">
@@ -40,9 +41,14 @@
 		    <input name="seatt_name" type="text" id="seatt_name" size="50" maxlength="150">
             </p>
 		    <p>Event Description<br>
-		      <label for="seatt_desc"></label>
-		      <input name="seatt_desc" type="text" id="seatt_desc" size="80" maxlength="150">
-		    </p>
+            <?php 
+            // Open in WP editor
+            $content = '';
+            $editor_id = 'seatt_desc';
+
+            wp_editor( $content, $editor_id, array( 'media_buttons' => true, 'wpautop' => true, 'textarea_rows' => 5 ) );
+            ?>
+            </p>
 		    <p>Attendee Limit (enter 0 for no limit)*<br>
 		      <label for="seatt_limit"></label>
 		      <input name="seatt_limit" type="text" id="seatt_limit" size="14" maxlength="8" value="0">
@@ -57,7 +63,6 @@ eg the server date/time is currently '<a onclick="document.getElementById('seatt
             <p>
 		      <input type="submit" name="Submit" value="<?php _e('Add Event', 'seatt_trdom' ) ?>" />
 		    </p>
-  </form>
-		  <p>&nbsp;</p>
-          
+  		  </form>
+		  <p>&nbsp;</p>       
           </div>

@@ -1,7 +1,7 @@
 <?php global $wpdb; ?>
 <div class="wrap">  
 <?php include("seatt_header.php"); ?>
-          <?php    echo "<h2>" . __( 'Simple Event Attendance Options', 'seatt_trdom' ) . "</h2>"; ?>  
+          <?php    echo "<h2>" . __( 'Simple Event Attendance Summary', 'seatt_trdom' ) . "</h2>"; ?>  
 <?php
 
 // Clean down event ID by checking if numeric, then casting to integer
@@ -39,7 +39,7 @@ if (($event_id != '') && (isset($_GET['remove_event']))) {
 
 // Check for duplicate event
 if (($event_id != '') && (isset($_GET['duplicate_event']))) {
-	
+
 	// Get existing event details
 	$event = $wpdb->get_row($wpdb->prepare("SELECT event_name, event_desc, event_limit, event_start, event_expire, event_reserves FROM ".$wpdb->prefix."seatt_events WHERE id = %d", $event_id));
 
@@ -114,10 +114,4 @@ if	($seatt_hidden == 'Y') {
 }
     ?>
 </table>
-<!--
-To come.
-    <h3>Options:</h3>
-  <p>Attendees visible to all?</p>
-        <input type="submit" name="Submit" value="<?php _e('Update Options', 'seatt_trdom' ) ?>" />  
--->
 </div>  
