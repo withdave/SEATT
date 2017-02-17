@@ -2,15 +2,15 @@
 
 Contributors: sourcez
 
-Donate link: http://www.3cc.org/
+Donate link: https://withdave.com
 
 Tags: events, attendance list, attendance, event management, sign-up, registration
 
 Requires at least: 3.4
 
-Tested up to: 4.5.3
+Tested up to: 4.7.2
 
-Stable tag: 1.4.0
+Stable tag: 1.5.0
 
 Simple attendance list, multiple lists can be added to any post or page and subscribed members can be edited through the admin panel.
 
