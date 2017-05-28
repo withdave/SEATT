@@ -1,4 +1,4 @@
-=== Plugin Name ===
+=== SEATT: Simple Event Attendance ===
 
 Contributors: sourcez
 
