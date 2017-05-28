@@ -71,6 +71,8 @@ A. No. It's set to be users only, as this reduces the risk of unwanted spam, and
 
 5. screenshot-5.png shows a post with the signup form after registering, this has a start and finish time from v1.4
 
+6. screenshot-6.png shows the top of the list shortcode, listing the number of events and each signup form (from v1.5)
+
 
 
 == Changelog ==
