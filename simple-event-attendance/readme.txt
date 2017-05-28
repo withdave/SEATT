@@ -87,6 +87,10 @@ Update to fulfil some of the requests posted at https://withdave.com/2017/05/sea
 
 * Removed use of extract function from add_shortcode (seatt-list and seatt-form) as per best practice
 
+* Added ability to use shortcode to control public visibility of comments
+
+* Updated screenshots for app
+
 
 
 = 1.4.0 =
