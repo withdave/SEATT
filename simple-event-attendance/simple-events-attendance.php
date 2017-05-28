@@ -1,10 +1,10 @@
 <?php
 /*
 Plugin Name: Simple Event Attendance (SEATT)
-Version: 1.4.0
-Plugin URI: http://www.3cc.org/scripts/wp-seatt-simple-event-attendance/
+Version: 1.5.0
+Plugin URI: https://github.com/withdave/SEATT
 Author: Dave Channon
-Author URI: http://www.3cc.org
+Author URI: https://www.withdave.com
 Description: Simple attendance list, multiple lists can be added to any post or page and subscribed members can be edited.
 */
 global $seatt_db_version;
@@ -15,7 +15,7 @@ function seatt_install() {
 	global $wpdb;
 	global $seatt_db_version;
 	require_once(ABSPATH . 'wp-admin/includes/upgrade.php');
-   
+
 	// Install tables
 	$sql = "CREATE TABLE " . $wpdb->prefix . "seatt_events (
 		id mediumint(9) NOT NULL AUTO_INCREMENT,
@@ -36,9 +36,9 @@ function seatt_install() {
 		UNIQUE KEY id (id)
 		) ENGINE = MYISAM CHARACTER SET utf8 COLLATE utf8_general_ci;";
 	dbDelta($sql);
- 
+
    add_option("seatt_db_version", $seatt_db_version);
-   
+
     $installed_ver = get_option( "seatt_db_version" );
 
    if ($installed_ver != $seatt_db_version) {
@@ -69,11 +69,11 @@ function seatt_install() {
 
 function seatt_uninstall() {
 	global $wpdb;
-   
+
 	// Remove tables
 	$wpdb->query("DROP TABLE IF EXISTS " . $wpdb->prefix . "seatt_events");
 	$wpdb->query("DROP TABLE IF EXISTS " . $wpdb->prefix . "seatt_attendees");
- 	
+
 	// Remove option
    delete_option("seatt_db_version");
 }
@@ -91,20 +91,20 @@ function seatt_update_db_check() {
 
 add_action('seatt_loaded', 'seatt_update_db_check');
 
-function seatt_admin() {  
+function seatt_admin() {
 	include('seatt_events_admin.php');
 }
 
-function seatt_admin_add() {   
+function seatt_admin_add() {
 	include('seatt_events_add.php');
 }
 
-function seatt_admin_edit() {   
+function seatt_admin_edit() {
 	include('seatt_events_edit.php');
 }
 // To include in a version soon
 /*
-function seatt_admin_settings() {   
+function seatt_admin_settings() {
 	include('seatt_events_settings.php');
 }
 */
@@ -121,14 +121,41 @@ function seatt_admin_actions() {
 
 add_action('admin_menu', 'seatt_admin_actions');
 
-function seatt_func( $atts ) {
-	extract( shortcode_atts( array(
-		'event_id' => '1',
-	), $atts ) );
+// Set shortcode for seatt-form shortcode and seatt_form function
+function seatt_tag_form( $atts ) {
 
-	return seatt_form("{$event_id}");
+	// Attributes - category only at the moment
+	$atts = shortcode_atts(
+		array(
+			'event_id' => '',
+			'public_comments' => '0',
+		),
+		$atts
+	);
+
+	return seatt_form($atts['event_id'], $atts['public_comments']);
+
 }
-add_shortcode( 'seatt-form', 'seatt_func' );
 
+add_shortcode( 'seatt-form', 'seatt_tag_form' );
+
+
+// Set shortcode for seatt-list shortcode and seatt_list function
+function seatt_tag_list( $atts ) {
+
+	// Attributes - category only at the moment
+	$atts = shortcode_atts(
+		array(
+			'category' => '',
+			'public_comments' => '0',
+		),
+		$atts,
+		'seatt-list'
+	);
+
+	return seatt_list($atts['category'], $atts['public_comments']);
+
+}
+add_shortcode( 'seatt-list', 'seatt_tag_list' );
 
 ?>

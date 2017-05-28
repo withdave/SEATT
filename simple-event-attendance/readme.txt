@@ -2,15 +2,15 @@
 
 Contributors: sourcez
 
-Donate link: http://www.3cc.org/
+Donate link: https://withdave.com
 
 Tags: events, attendance list, attendance, event management, sign-up, registration
 
 Requires at least: 3.4
 
-Tested up to: 4.5.3
+Tested up to: 4.7.5
 
-Stable tag: 1.4.0
+Stable tag: 1.5.0
 
 Simple attendance list, multiple lists can be added to any post or page and subscribed members can be edited through the admin panel.
 
@@ -75,6 +75,22 @@ A. No. It's set to be users only, as this reduces the risk of unwanted spam, and
 
 == Changelog ==
 
+= 1.5.0 =
+
+Update to fulfil some of the requests posted at https://withdave.com/2017/05/seatt-feature-request-may-2017-update/, as well as some other fixes:
+
+* Updates to structure of comments in source files to improve readability
+
+* Addition of list format to make displaying multiple events easier
+
+* Change to remaining time display in the admin panel (from hours to a formatted time)
+
+* Removed use of extract function from add_shortcode (seatt-list and seatt-form) as per best practice
+
+* Added ability to use shortcode to control public visibility of comments
+
+* Updated screenshots for app
+
 
 
 = 1.4.0 =
@@ -111,25 +127,25 @@ Numerous changes to code to tidy and improve security, including:
 
 
 
-= 1.3.0 = 
+= 1.3.0 =
 
 Updated all SQL queries to use wpdb->prepare for additional security, and updated security as per feedback from J.D. Grimes and Ipstensu to remove a SQL injection risk. Also fixed a template issue when the register form is shown in new wordpress templates, and tested compatibility with 4.3.1. Fixed an issue where character encoding would display comments incorrectly on the user-side. Apologies for the delay in updating this plugin.
 
 
 
-= 1.2.7 = 
+= 1.2.7 =
 
 Updated version numbers, fixed problems with apostrophes being escaped with numerous backspaces in admin panel and in the comment box. Removed first+last name from page template as this is rarely used, with list users no longer in a table format, but now in an ordered list. Admins can now signup registered users simply by supplying a username in the admin panel. Fixed problems with wp_prepare() causing errors in wordpress 3.5. Deleting the plugin now removes all database tables.
 
 
 
-= 1.2.6 = 
+= 1.2.6 =
 
 Updated incorrect link in seatt_header.php and version number.
 
 
 
-= 1.2.5 = 
+= 1.2.5 =
 
 Update version numbers, change time() for current_time() to correct offsets in control panel in all files. Also added expire date to summary table in admin. Added a list of signed up user emails to allow copying and emailing of everyone at once. Also added register and login links to the form for guest users.
 
@@ -179,6 +195,9 @@ Fixed errors with multiple forms on the same page (thanks to mhobach) and form n
 
 == Upgrade Notice ==
 
+= 1.5.0 =
+
+Changes in all files (see changelog). Changes can now be viewed on the GitHub repo.
 
 
 = 1.4.0 =

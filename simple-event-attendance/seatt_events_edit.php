@@ -1,4 +1,7 @@
 <?php
+// seatt_events_edit.php
+// Purpose: Template for the edit event SEATT settings page
+
 global $wpdb;
 
 // Clean down event ID by checking if numeric, then casting to integer
@@ -11,16 +14,16 @@ if (isset($_GET['event_id'])) {
 } else {
 	$event_id = '';
 }
-	
+
 ?>
-<div class="wrap">  
+<div class="wrap">
 <?php include("seatt_header.php"); ?>
 
 <?php echo "<h2>" . __( 'Simple Event Attendance - Edit Event', 'seatt_trdom' ) . "</h2>";
 // Kill page if no event_id, and check to see if in DB
 if ($event_id == '') {
 	die("<div class=\"error\"><p><strong>No event ID specified, please reload the main SEATT page.</strong></p></div>");
-} else {		  
+} else {
 	// Check to see whether event exists
 	$seatt_this_limit = $wpdb->get_var($wpdb->prepare("SELECT event_limit FROM ".$wpdb->prefix."seatt_events WHERE id = %d", $event_id));
 	if ($seatt_this_limit == NULL) {
@@ -37,44 +40,44 @@ if (isset($_GET['clear_event'])) {
     </div>
 	<?php
 }
-		  
+
 // Register user to event
 if (isset($_POST['seatt_add_user'])) {
 	$_POST = stripslashes_deep($_POST);
 	$add_username = sanitize_text_field($_POST['seatt_add_user']);
-	  
+
 	// Check username exists in wordpress system
 	if (username_exists($add_username) != NULL) {
 		// Check whether user is already registered for event
 		$add_userid = username_exists($add_username);
 		if ($wpdb->get_var($wpdb->prepare("SELECT user_id FROM ".$wpdb->prefix."seatt_attendees WHERE event_id = %d AND user_id = %d", $event_id, $add_userid)) == NULL) {
-			
+
 			// Sanitise any comments
 			$user_comment = sanitize_text_field($_POST['seatt_add_comment']);
 			if (strlen(trim($user_comment)) == 0) {
 				$user_comment = "";
 			}
-			
+
 			// Check there's still space to add user
 			if ($seatt_this_limit > ($wpdb->get_var($wpdb->prepare("SELECT count(user_id) FROM ".$wpdb->prefix."seatt_attendees WHERE event_id = %d", $event_id)))) {
-				
+
 				// Check the event is active and not expired
 				if ($wpdb->get_var($wpdb->prepare("SELECT event_status FROM ".$wpdb->prefix."seatt_events WHERE id = %d AND event_expire >= %d", $event_id, time())) == 1) {
-			
+
 					// Create registration
 					$wpdb->insert($wpdb->prefix.'seatt_attendees', array( 'event_id' => $event_id, 'user_id' => $add_userid, 'user_comment' => $user_comment), array('%d', '%d', '%s') );
 					?>
 					<div class="updated">
 						<p><strong>User <em><?php echo esc_html($add_username); ?></em> registered to event.</strong></p>
 					</div>
-					<?php 
+					<?php
 				} else {
 					// Else if event not active
 					?>
 					<div class="error">
 						<p><strong>User <em><?php echo esc_html($add_username); ?></em> was not added, as the event status is closed, or the event closing date has passed.</strong></p>
 					</div>
-					<?php						
+					<?php
 				}
 			} else {
 				// Else if no space to add the user
@@ -104,19 +107,19 @@ if (isset($_POST['seatt_add_user'])) {
 // END
 // Edit event details
 elseif ((isset($_POST['seatt_name'])) && (!isset($_POST['seatt_add_user']))) {
-		
-	$_POST = stripslashes_deep($_POST);  
+
+	$_POST = stripslashes_deep($_POST);
 	$event_name = sanitize_text_field($_POST['seatt_name']);
 	$event_desc = wp_kses_post($_POST['seatt_desc']);
 	$event_limit = intval($_POST['seatt_limit']);
 	$event_status = intval($_POST['seatt_status']);
 	$event_start = strtotime($_POST['seatt_start']);
 	$event_expire = strtotime($_POST['seatt_expire']);
-	
+
 	// Ensure required fields contain values, update if true
 	if ((strlen(trim($event_name)) > 0) && ($event_start) && ($event_expire) && (strlen(intval($event_status)) == 1)) {
 		$wpdb->update($wpdb->prefix.'seatt_events', array( 'event_name' => $event_name, 'event_desc' => $event_desc, 'event_limit' => $event_limit, 'event_start' => $event_start, 'event_expire' => $event_expire, 'event_status' => $event_status ), array( 'id' => $event_id ), array('%s', '%s', '%d', '%s', '%s', '%d'));
-		
+
 		?>
 		<div class="updated">
         	<p><strong>Event <em><?php echo esc_html($event_name); ?></em> updated.</strong></p>
@@ -153,7 +156,7 @@ if (isset($_GET['remove_attendee'])) {
 // GET EVENT DETAILS FOR PAGE
 $event = $wpdb->get_row($wpdb->prepare("SELECT id, event_name, event_desc, event_limit, event_start, event_expire, event_status FROM ".$wpdb->prefix."seatt_events WHERE id = %d", $event_id));
 
-// Check to see if a value has been returned   
+// Check to see if a value has been returned
 if ($event->id != "") {
 	?>
 	<p><strong>Event options:</strong></p>
@@ -162,9 +165,9 @@ if ($event->id != "") {
 		<label for="seatt_name"></label>
 		<input name="seatt_name" type="text" id="seatt_name" value="<?php echo esc_html($event->event_name); ?>" size="50" maxlength="150">
 	</p>
-	
+
     <p>Event Description<br>
-    <?php 
+    <?php
     // Load in WP editor
     $content = wp_kses_post($event->event_desc);
     $editor_id = 'seatt_desc';
@@ -194,11 +197,11 @@ eg a week from now is '<a onclick="document.getElementById('seatt_expire').value
 		<input type="submit" name="Submit" value="<?php _e('Edit Event', 'seatt_trdom' ) ?>" />
 	<br />
 	<br />
-	Del<a href="admin.php?page=seatt_events&event_id=<?php echo $event_id; ?>&remove_event=1">e</a>te Event? / 
+	Del<a href="admin.php?page=seatt_events&event_id=<?php echo $event_id; ?>&remove_event=1">e</a>te Event? /
 	Cl<a href="admin.php?page=seatt_events_edit&event_id=<?php echo $event_id; ?>&clear_event=1">e</a>ar all attendees (Deleting an event/attendees is permanent)</p>
 	</form><br />
 	<hr /><br />
-	
+
 	<h3>
 	Event participants:</h3>
 	<p>
@@ -249,7 +252,7 @@ eg a week from now is '<a onclick="document.getElementById('seatt_expire').value
 	<p>To keep the plugin simple, no mass emailer is included. If you really want to email everyone you can copy the list below into your BCC to field and email them that way.</p>
 	<blockquote>
 	<p>
-	<?php 
+	<?php
 	$num = 1;
 	foreach ($users as $user) {
 		$user_info = get_userdata($user->user_id);
@@ -260,6 +263,6 @@ eg a week from now is '<a onclick="document.getElementById('seatt_expire').value
 	</p>
 	</blockquote>
 	<?php
-	} 
-?>          
+	}
+?>
 </div>
