@@ -78,16 +78,9 @@ if	($seatt_hidden == 'Y') {
 ?>
 <p>This page lists all events (open and closed) that exist in the database.</p>
 <br />
-<h2>How to display events in posts and pages</h2>
-<!--<p>To display all currently active events, paste the following into the post/page text:</p>
-<p><pre>[seatt-list]</pre></p>
-<br />-->
-<p>To include a specific attendance form on a page/post, paste the tag into the post/page text:</p>
-<p><pre>[seatt-form event_id=x]</pre></p>
-<p>(x = the event id in the table below). If you haven't created the event_id, or have deleted it, nothing will be displayed.</p>
-<br />
 <h2>Events</h2>
-<table width="auto" border="0" align="left" cellpadding="5" cellspacing="5">
+<p>Lists all events (green = open, amber = expired, red = closed).</p>
+<table width="auto" border="0"  cellpadding="5" cellspacing="5">
     <tr>
         <th align="left" scope="col">Event ID</th>
         <th align="left" scope="col">Shortcode</th>
@@ -110,19 +103,23 @@ if	($seatt_hidden == 'Y') {
     // If zero then mark event as expired
 		if ($event_expire_seconds < 0) {
 			$event_expire_seconds = 0;
-			$event->event_status = 0;
+			//$event->event_status = 0;
     	}
 
     // Set variable with formatted time remaining
-    $event_expire = sprintf('%02d%s%02d%s%02d%s', floor($event_expire_seconds/3600), 'd ', ($event_expire_seconds/60)%60, 'm ', $event_expire_seconds%60, 's');
+    $event_expire_days = floor($event_expire_seconds/3600/24);
+    $event_expire_hours = floor($event_expire_seconds/3600) - ($event_expire_days*24);
+    $event_expire = sprintf('%d%s%02d%s%02d%s%02d%s', $event_expire_days, 'd ', $event_expire_hours, 'h ', ($event_expire_seconds/60)%60, 'm ', $event_expire_seconds%60, 's');
 
     // Set div colour and text for the status
     if(intval($event->event_status) == 0) {
-      $event_status_html = '<div style="width:15px;height:15px;background-color:#ff0000" title="Event expired or closed"></div>';
+      $event_status_html = '<div style="width:15px;height:15px;background-color:#ff0000" title="Event closed"></div>';
+    } elseif ($event_expire_seconds == 0) {
+      $event_status_html = '<div style="width:15px;height:15px;background-color:#ffc200" title="Event expired"></div>';
     } else {
-      $event_status_html = '<div style="width:15px;height:15px;background-color:#00ff00" title="Event open"></div>';
+      $event_status_html = '<div style="width:15px;height:15px;background-color:#00cc00" title="Event open"></div>';
     }
-    //$event_status_2 = '<div style="width:15px;height:15px;background-color:#FFC200" title="Event pending"></div>';
+
 
     ?>
     <tr>
@@ -143,4 +140,17 @@ if	($seatt_hidden == 'Y') {
 }
     ?>
 </table>
+<br />
+<br />
+<h2>How to display events in posts and pages</h2>
+<p>To display all currently open events (includes anything with an open status, regardless of whether registration has closed), paste the following into the post/page text:</p>
+<p><pre>[seatt-list]</pre></p>
+<br />
+<p>To include a specific attendance form on a page/post, paste the tag into the post/page text:</p>
+<p><pre>[seatt-form event_id=x]</pre></p>
+<p>(x = the event id in the table below). If you haven't created the event_id, or have deleted it, nothing will be displayed.</p>
+<br />
+<p>To make user comments publicly visible on the post/page event form, add public_comments=1 to the short code, for example:</p>
+<p><pre>[seatt-list public_comments=1] or [seatt-form event_id=x public_comments=1]</pre></p>
+<p>By default, comments will not be shown in the post/page form.</p>
 </div>

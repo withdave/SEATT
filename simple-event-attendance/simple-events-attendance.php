@@ -121,14 +121,41 @@ function seatt_admin_actions() {
 
 add_action('admin_menu', 'seatt_admin_actions');
 
-function seatt_func( $atts ) {
-	extract( shortcode_atts( array(
-		'event_id' => '1',
-	), $atts ) );
+// Set shortcode for seatt-form shortcode and seatt_form function
+function seatt_tag_form( $atts ) {
 
-	return seatt_form("{$event_id}");
+	// Attributes - category only at the moment
+	$atts = shortcode_atts(
+		array(
+			'event_id' => '',
+			'public_comments' => '0',
+		),
+		$atts
+	);
+
+	return seatt_form($atts['event_id'], $atts['public_comments']);
+
 }
-add_shortcode( 'seatt-form', 'seatt_func' );
 
+add_shortcode( 'seatt-form', 'seatt_tag_form' );
+
+
+// Set shortcode for seatt-list shortcode and seatt_list function
+function seatt_tag_list( $atts ) {
+
+	// Attributes - category only at the moment
+	$atts = shortcode_atts(
+		array(
+			'category' => '',
+			'public_comments' => '0',
+		),
+		$atts,
+		'seatt-list'
+	);
+
+	return seatt_list($atts['category'], $atts['public_comments']);
+
+}
+add_shortcode( 'seatt-list', 'seatt_tag_list' );
 
 ?>

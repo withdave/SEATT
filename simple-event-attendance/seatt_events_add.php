@@ -1,25 +1,20 @@
-<?php
-// seatt_events_add.php
-// Purpose: Template for the add event SEATT settings page
-?>
-
-<div class="wrap">
+<div class="wrap">  
 <?php include("seatt_header.php"); ?>
           <?php    echo "<h2>" . __( 'Simple Event Attendance - Add Event', 'seatt_trdom' ) . "</h2>";
 		  // Process form if sent
           if(isset($_POST['seatt_name'])) {
-			$_POST = stripslashes_deep($_POST);
+			$_POST = stripslashes_deep($_POST);  
 			$event_name = sanitize_text_field($_POST['seatt_name']);
 			$event_desc = wp_kses_post($_POST['seatt_desc']);
 			$event_limit = intval($_POST['seatt_limit']);
 			$event_start = strtotime($_POST['seatt_start']);
 			$event_expire = strtotime($_POST['seatt_expire']);
-
+			
 			// Ensure required fields contain values, insert if true
 			if ((strlen(trim($event_name)) > 0) &&
 				($event_start) &&
 				($event_expire)) {
-
+							
 				global $wpdb;
 				$wpdb->insert($wpdb->prefix.'seatt_events', array( 'event_name' => $event_name, 'event_desc' => $event_desc, 'event_limit' => $event_limit, 'event_start' => $event_start, 'event_expire' => $event_expire, 'event_status' => 1, 'event_reserves' => 0 ), array('%s', '%s', '%d', '%s', '%s', '%d', '%d') );
 				?>
@@ -27,7 +22,7 @@
                 	<p><strong>Event <?php echo esc_html($event_name); ?> added.</strong></p>
                 </div>
 				<?php
-
+				
 			  } else {
 
 				// If required fields missing
@@ -46,7 +41,7 @@
 		    <input name="seatt_name" type="text" id="seatt_name" size="50" maxlength="150">
             </p>
 		    <p>Event Description<br>
-            <?php
+            <?php 
             // Open in WP editor
             $content = '';
             $editor_id = 'seatt_desc';
@@ -69,5 +64,5 @@ eg the server date/time is currently '<a onclick="document.getElementById('seatt
 		      <input type="submit" name="Submit" value="<?php _e('Add Event', 'seatt_trdom' ) ?>" />
 		    </p>
   		  </form>
-		  <p>&nbsp;</p>
+		  <p>&nbsp;</p>       
           </div>

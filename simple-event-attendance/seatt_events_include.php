@@ -2,18 +2,8 @@
 // seatt_events_include.php
 // Purpose: Carries functions for UI (in-page form and the event list)
 
-
-// Function for the in-page
-function seatt_form($event_id) {
-	global $wpdb;
-	global $current_user;
-	//get_currentuserinfo(); deprecated since wp 4.5
-    $current_user = wp_get_current_user();
-	$seatt_error = "";
-
-    // Get settings
-    $seatt_set_public_comments = 0;
-
+// Function to cleanse numeric values, set to nothing if something other than an integer
+function check_event_id($event_id) {
 	// Clean down event ID by checking if numeric, then casting to integer
 	if (isset($event_id)) {
 		if (is_numeric($event_id)) {
@@ -24,6 +14,21 @@ function seatt_form($event_id) {
 	} else {
 		$event_id = '';
 	}
+	// Return the event_id
+	return $event_id;
+}
+
+
+// Function for the in-page form
+function seatt_form($event_id, $public_comments = 0) {
+	global $wpdb;
+	global $current_user;
+	//get_currentuserinfo(); deprecated since wp 4.5
+	$current_user = wp_get_current_user();
+	$seatt_error = "";
+
+	// Clean down event ID by checking if numeric, then casting to integer
+	$event_id = check_event_id($event_id);
 
 	// Clean down form event ID by checking if numeric, then casting to integer
 	if (isset($_POST['seatt_event_id'])) {
@@ -126,7 +131,7 @@ function seatt_form($event_id) {
 				$user_info = get_userdata($user->user_id);
 				$seatt_output .= '<li>' . esc_html($user_info->user_login);
 				// If public comments setting is enabled, display comments in form
-                if ($seatt_set_public_comments) {
+                if ($public_comments & esc_html($user->user_comment) != '') {
                     $seatt_output .= ' (' . esc_html($user->user_comment) . ')</li>';
                 }
                 $seatt_output .= '</li>';
@@ -199,6 +204,37 @@ function seatt_form($event_id) {
 			return $seatt_output;
 		}
 	}
+}
+
+
+// Function for the in-page list
+function seatt_list($category="",$public_comments = 0) {
+	global $wpdb;
+
+	// Get list of open events, which haven't expired
+	$seatt_event_list = $wpdb->get_results($wpdb->prepare("SELECT id FROM ".$wpdb->prefix."seatt_events WHERE event_status = %d AND event_expire >= %d ORDER BY event_expire ASC", 1, current_time('timestamp')));
+
+	if (count($seatt_event_list) > 0) {
+		$seatt_output = '<div style="background:#E8E8E8;padding:10px;margin-bottom:5px;"><h2 style="margin-top:10px;">Event listing</h2>';
+
+		if (count($seatt_event_list) > 1) {
+			$seatt_output .= '<p>There are ' . count($seatt_event_list) . ' open events.</p></div>';
+		} else {
+			$seatt_output .= '<p>There is ' . count($seatt_event_list) . ' open event.</p></div>';
+		}
+
+		foreach ($seatt_event_list as $seatt_event) {
+			$seatt_output .= seatt_form($seatt_event->id,$public_comments);
+		}
+
+		return $seatt_output;
+
+	} else {
+		// If there are no records, return a message
+		return '<div style="background:#E8E8E8;padding:10px;margin-bottom:5px;"><h2 style="margin-top:10px;">All open events</h2>
+		<p>There are currently no open events.</p></div>';
+	}
+
 }
 
 ?>

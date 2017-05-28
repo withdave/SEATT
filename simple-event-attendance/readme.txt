@@ -8,7 +8,7 @@ Tags: events, attendance list, attendance, event management, sign-up, registrati
 
 Requires at least: 3.4
 
-Tested up to: 4.7.2
+Tested up to: 4.7.5
 
 Stable tag: 1.5.0
 
@@ -84,6 +84,8 @@ Update to fulfil some of the requests posted at https://withdave.com/2017/05/sea
 * Addition of list format to make displaying multiple events easier
 
 * Change to remaining time display in the admin panel (from hours to a formatted time)
+
+* Removed use of extract function from add_shortcode (seatt-list and seatt-form) as per best practice
 
 
 
