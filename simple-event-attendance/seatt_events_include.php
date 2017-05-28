@@ -1,4 +1,9 @@
 <?php
+// seatt_events_include.php
+// Purpose: Carries functions for UI (in-page form and the event list)
+
+
+// Function for the in-page
 function seatt_form($event_id) {
 	global $wpdb;
 	global $current_user;

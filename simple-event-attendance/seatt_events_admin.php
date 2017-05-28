@@ -1,4 +1,9 @@
-<?php global $wpdb; ?>
+<?php
+// seatt_events_admin.php
+// Purpose: Template for the main SEATT settings page
+
+global $wpdb;
+?>
 <div class="wrap">
 <?php include("seatt_header.php"); ?>
           <?php    echo "<h2>" . __( 'Simple Event Attendance Summary', 'seatt_trdom' ) . "</h2>"; ?>
@@ -109,7 +114,16 @@ if	($seatt_hidden == 'Y') {
     	}
 
     // Set variable with formatted time remaining
-    $event_expire = sprintf('%02d%s%02d%s%02d%s', floor($event_expire_seconds/3600), 'd ', ($event_expire_seconds/60)%60, 'm ', $event_expire_seconds%60, 's')
+    $event_expire = sprintf('%02d%s%02d%s%02d%s', floor($event_expire_seconds/3600), 'd ', ($event_expire_seconds/60)%60, 'm ', $event_expire_seconds%60, 's');
+
+    // Set div colour and text for the status
+    if(intval($event->event_status) == 0) {
+      $event_status_html = '<div style="width:15px;height:15px;background-color:#ff0000" title="Event expired or closed"></div>';
+    } else {
+      $event_status_html = '<div style="width:15px;height:15px;background-color:#00ff00" title="Event open"></div>';
+    }
+    //$event_status_2 = '<div style="width:15px;height:15px;background-color:#FFC200" title="Event pending"></div>';
+
     ?>
     <tr>
         <td><?php echo esc_html($event->id); ?></td>
@@ -117,7 +131,7 @@ if	($seatt_hidden == 'Y') {
         <td><a href="admin.php?page=seatt_events_edit&event_id=<?php echo intval($event->id); ?>"><?php echo esc_html($event->event_name); ?></a></td>
         <td><?php echo $event_expire; ?></td>
         <td><?php echo date("d-m-Y H:i", $event->event_expire); ?></td>
-        <td><img src="<?php echo esc_url( home_url( '/' ) ); ?>wp-content/plugins/simple-event-attendance/<?php echo intval($event->event_status); ?>.gif" width="10" height="10" /></td>
+        <td><?php echo $event_status_html; ?></td>
         <td><strong><?php echo intval($attendees); ?></strong> / <?php echo intval($event->event_limit); ?></td>
         <td><a href="admin.php?page=seatt_events_edit&event_id=<?php echo intval($event->id); ?>">Edit</a> | <a href="admin.php?page=seatt_events&duplicate_event=1&event_id=<?php echo intval($event->id); ?>">Duplicate</a></td>
     </tr>
