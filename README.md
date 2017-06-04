@@ -17,6 +17,7 @@ This repo will hold the latest development versions, which will then be pushed t
 - Custom redirect to put user back at entry page after login.
 - Capturing of timestamp when user registers for event (logging).
 - Update list page to give the flexibility to add category filters.
+- Ability to access event and registration data via WP Rest API
 
 ### Requests fulfilled in 1.5.0
 - Event calendar shortcode and layout – Allow you to group events into categories and display all relevant events in a list view on a post.
