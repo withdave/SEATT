@@ -8,7 +8,7 @@ Tags: events, attendance list, attendance, event management, sign-up, registrati
 
 Requires at least: 3.4
 
-Tested up to: 4.9.1
+Tested up to: 4.9
 
 Stable tag: 1.5.0
 
