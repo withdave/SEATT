@@ -100,7 +100,7 @@ function seatt_form($event_id, $public_comments = 0) {
 		$event = $wpdb->get_row($wpdb->prepare("SELECT id, event_name, event_desc, event_limit, event_start, event_expire, event_status FROM ".$wpdb->prefix."seatt_events WHERE id = %d LIMIT 1", $event_id));
 
 		// Make sure that results were returned
-		if (count($event) > 0) {
+		if (!empty($event)) {
 
 			if ($event->id != "") {
 				$attendees = $wpdb->get_var($wpdb->prepare("SELECT COUNT(user_id) FROM ".$wpdb->prefix."seatt_attendees WHERE event_id = %d", $event_id));
@@ -214,7 +214,7 @@ function seatt_list($category="",$public_comments = 0) {
 	// Get list of open events, which haven't expired
 	$seatt_event_list = $wpdb->get_results($wpdb->prepare("SELECT id FROM ".$wpdb->prefix."seatt_events WHERE event_status = %d AND event_expire >= %d ORDER BY event_expire ASC", 1, current_time('timestamp')));
 
-	if (count($seatt_event_list) > 0) {
+	if (!empty($seatt_event_list)) {
 		$seatt_output = '<div style="background:#E8E8E8;padding:10px;margin-bottom:5px;"><h2 style="margin-top:10px;">Event listing</h2>';
 
 		if (count($seatt_event_list) > 1) {
