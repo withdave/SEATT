@@ -4,17 +4,17 @@ Contributors: sourcez
 Donate link: https://withdave.com
 Tags: events, attendance list, attendance, event management, sign-up, registration
 Requires at least: 3.4
-Tested up to: 4.9
+Tested up to: 5.0
 Requires PHP: 5.6
-Stable tag: 1.5.0
+Stable tag: 1.5.1
 
-Simple attendance list, multiple lists can be added to any post or page and subscribed members can be edited through the admin panel.
+Simple event attendance list plugin. Set up an event in the WP admin panel, and users can register for these events. Multiple lists can be added to any post or page and subscribed members can be updated through the admin panel.
 
 == Description ==
 
-Simple attendance list, multiple lists can be added to any post or page and subscribed members can be edited.
+This is an event attendance plugin, which allows configuration of multiple events, and embedding of multiple events in any page or post using shortcodes.
 
-Add an event in the admin panel with a name, description, closing date (for signing up) and registration limit (for number of users who can signup). You can then embed a form into any post or page using the wordpress shorttag [seatt-form event_id=x] (x = the event id).
+Add an event in the admin panel with a name, description, closing date (for signing up) and registration limit (for number of users who can signup). You can then embed a form into any post or page using the wordpress shortcode [seatt-form event_id=x] (x = the event id).
 
 From the admin panel you can read comments left by people who have registered, as well as boot them off the list or delete the list altogether.
 
@@ -22,7 +22,7 @@ Please note you have to allow user registration for this plugin to function. If 
 
 Uninstalling removes all traces of plugin, including from the database. This means any events you have will be lost. Updates will not affect existing events nor their attendees.
 
-Comments are always welcome, it's through feedback that we improve.
+Comments are always welcome, it's through feedback that we improve!
 
 == Installation ==
 
@@ -43,6 +43,9 @@ Simple to install, automatically adds relevant information to the database.
 Q. Can guests register for events?
 A. No. It's set to be users only, as this reduces the risk of unwanted spam, and keeps plugin complexity low (no need for captchas etc)
 
+Q. Where is event and user data stored?
+A. Users are native wordpress users, and event and registration information is stored in seperate database tables.
+
 == Screenshots ==
 
 1. screenshot-1.png shows the admin panel event browser
@@ -58,6 +61,14 @@ A. No. It's set to be users only, as this reduces the risk of unwanted spam, and
 6. screenshot-6.png shows the top of the list shortcode, listing the number of events and each signup form (from v1.5)
 
 == Changelog ==
+
+= 1.5.1 =
+
+Minor PHP function change fixes
+
+* Updated readme to better reflect function of plugin
+
+* Corrected use of PHP count function to remove warning when using PHP 7.2+
 
 = 1.5.0 =
 
@@ -150,6 +161,10 @@ Fixed errors with multiple forms on the same page (thanks to mhobach) and form n
 * Initial Release Version
 
 == Upgrade Notice ==
+
+= 1.5.1 =
+
+Changes in xxxx (see changelog).
 
 = 1.5.0 =
 

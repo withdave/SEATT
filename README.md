@@ -6,7 +6,7 @@ Updates will be posted on my blog - https://withdave.com/category/seatt/
 This repo will hold the latest development versions, which will then be pushed to WP once complete and tested.
 
 
-## Requests:
+## Open Requests:
 - Add categories to event list shortcode to allow selection of which types of events are displayed
 - Repeatable/recurring events – Some sort of functionality to allow repeatable events – whether this be decoupling of event details from dates, or some other mechanism.
 - Register for events without requiring an account – I’m currently planning to do this via email confirmation and with a captcha, but need to test it.
@@ -19,10 +19,10 @@ This repo will hold the latest development versions, which will then be pushed t
 - Update list page to give the flexibility to add category filters.
 - Ability to access event and registration data via WP Rest API
 
-### Requests fulfilled in 1.5.0
+### Features added in 1.5.0
 - Event calendar shortcode and layout – Allow you to group events into categories and display all relevant events in a list view on a post.
 - Allow other users to see comments on short-code form.
 
-### Requests fulfilled in 1.4.0
+### Features added in 1.4.0
 - Allow admin to use tinymce content editor.
 - Made compatible with PHP 5.6+
